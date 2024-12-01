@@ -5,7 +5,7 @@ import Data.List
 run :: FilePath -> IO Result
 run inputFile = solve2 part1 part2 contents
   where
-    contents = fileToLinesM ((fmap read) . words) inputFile
+    contents = fileToLinesM (read <.> words) inputFile
 
 part1 :: [[Int]] -> Int
 part1 pairs = pairwiseEuclidianDistance . transpose $ pairs

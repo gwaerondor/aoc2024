@@ -9,6 +9,7 @@ module Aoc (
   fileToSections,
   prettyResult,
   toResult,
+  (<.>),
   Result (..)
 ) where
 
@@ -57,3 +58,5 @@ fileToCsvM f path = fmap f <$> fileToCsv path
 
 fileToSections :: FilePath -> IO [[String]]
 fileToSections path = fmap lines <$> endBy "\n\n" <$> readFile path
+
+(<.>) f g = (fmap f) . g
