@@ -14,6 +14,7 @@ module Aoc (
 ) where
 
 import Data.List.Split
+import Control.Monad ((>=>))
 
 data Result =
   Result String String
@@ -37,9 +38,7 @@ solve2 f g contents = do
   return $ toResult p1 p2
 
 fileToLines :: FilePath -> IO [String]
-fileToLines path = do
-  text <- readFile path
-  return $ lines text
+fileToLines = readFile >=> (return . lines)
 
 fileToLine :: FilePath -> IO String
 fileToLine path = head <$> fileToLines path
