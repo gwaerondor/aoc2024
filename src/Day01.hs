@@ -5,17 +5,13 @@ import Data.List
 run :: FilePath -> IO Result
 run inputFile = solve2 part1 part2 contents
   where
-    contents = fileToLinesM (read <.> words) inputFile
+    contents = transpose <$> fileToLinesM (read <.> words) inputFile
 
 part1 :: [[Int]] -> Int
-part1 pairs = pairwiseEuclidianDistance . transpose $ pairs
-
-pairwiseEuclidianDistance [a, b] = sum . (fmap f) $ zip (sort a) (sort b)
+part1 [left, right] = sum . (fmap f) $ zip (sort left) (sort right)
   where f (x, y) = abs $ x - y
-pairwiseEuclidianDistance _ = -1
 
 part2 :: [[Int]] -> Int
-part2 pairs = f . transpose $ pairs
+part2 [left, right] = sum $ similarityScore right <$> left
   where
-    f [left, right] = sum $ similarityScore right <$> left
     similarityScore right x = sum $ filter (== x) right
