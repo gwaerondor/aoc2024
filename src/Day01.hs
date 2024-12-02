@@ -18,5 +18,4 @@ part2 :: [[Int]] -> Int
 part2 pairs = f . transpose $ pairs
   where
     f [left, right] = sum $ similarityScore right <$> left
-    similarityScore right x = x * (count right x)
-    count right x = length $ filter (== x) right
+    similarityScore right x = sum $ filter (== x) right
