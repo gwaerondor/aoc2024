@@ -1,6 +1,6 @@
 module Day03 (run) where
 import Aoc
-import Data.Maybe (isJust)
+import Data.Maybe (catMaybes)
 import Data.List (isPrefixOf, isSuffixOf)
 import Data.List.Split (splitOn)
 
@@ -13,7 +13,7 @@ run :: FilePath -> IO Result
 run inputFile =
   solve2 part1 part2 contents
   where
-    contents = choose id <$> parse <$> readFile inputFile
+    contents = catMaybes . parse <$> readFile inputFile
 
 part1 :: [Instruction] -> Int
 part1 input = sum $ f <$> input
