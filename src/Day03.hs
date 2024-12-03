@@ -16,7 +16,7 @@ run inputFile =
     contents = readFile inputFile
 
 part1 :: String -> Int
-part1 input = sum . fmap f . parse $ input
+part1 input = sum $ f <$> parse input
   where f (Mul a b) = a * b
         f _ = 0
 
@@ -53,5 +53,5 @@ tryParseArguments s =
     isValid x =
       beginsWith '(' x
       && endsWith ')' x
-      && count (== ',') x == 1
+      && count (== ',') x == 1 -- Allows (,1) but that doesn't happen so it's OK
       && (all (\c -> c `elem` "0123456789,()")) x
