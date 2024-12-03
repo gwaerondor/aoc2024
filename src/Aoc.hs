@@ -9,6 +9,9 @@ module Aoc (
   fileToSections,
   prettyResult,
   toResult,
+  choose,
+  takeWhileInclusive,
+  count,
   (<.>),
   Result (..)
 ) where
@@ -59,3 +62,18 @@ fileToSections :: FilePath -> IO [[String]]
 fileToSections path = fmap lines <$> endBy "\n\n" <$> readFile path
 
 (<.>) f g = (fmap f) . g
+
+takeWhileInclusive :: (a -> Bool) -> [a] -> [a]
+takeWhileInclusive _ [] = []
+takeWhileInclusive p (x:xs)
+  | p x = x : takeWhileInclusive p xs
+  | otherwise = [x]
+
+choose :: (b -> Maybe a) -> [b] -> [a]
+choose f (x:rest) = case f x of
+                      Nothing -> choose f rest
+                      Just y -> y : choose f rest
+choose _ [] = []
+
+count :: (a -> Bool) -> [a] -> Int
+count p = length . (filter p)

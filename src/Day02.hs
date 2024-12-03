@@ -7,8 +7,6 @@ run inputFile = solve2 part1 part2 contents
   where
     contents = fileToLinesM (read <.> words) inputFile
 
-count f = length . (filter f)
-
 part1 :: [[Int]] -> Int
 part1 = count reportIsSafe
 
