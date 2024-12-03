@@ -1,6 +1,7 @@
 module Day03 (run) where
 import Aoc
 import Data.Maybe (isJust)
+import Data.List (isPrefixOf, isSuffixOf)
 import Data.List.Split (splitOn)
 
 data Instruction =
@@ -31,11 +32,12 @@ part2 input = (f Do) $ parse input
 parse = (choose id) . parseTopLevel
 
 parseTopLevel :: String -> [Maybe Instruction]
-parseTopLevel ('d':'o':'(':')':rest) = (Just Do) : (parseTopLevel rest)
-parseTopLevel ('d':'o':'n':'\'':'t':'(':')':rest) = (Just Dont) : (parseTopLevel rest)
-parseTopLevel ('m':'u':'l':rest) = (tryParseArguments rest) : parseTopLevel rest
-parseTopLevel (_:rest) = parseTopLevel rest
 parseTopLevel [] = []
+parseTopLevel s
+  | "do()" `isPrefixOf` s = (Just Do) : (parseTopLevel $ drop 4 s)
+  | "don't()" `isPrefixOf` s = (Just Dont) : (parseTopLevel $ tail s)
+  | "mul" `isPrefixOf` s = (tryParseArguments $ drop 3 s) : (parseTopLevel $ tail s)
+  | otherwise = parseTopLevel $ tail s
 
 tryParseArguments :: String -> Maybe Instruction
 tryParseArguments s =
@@ -47,11 +49,8 @@ tryParseArguments s =
           _ -> Nothing
       False -> Nothing
   where
-    beginsWith c s = case s of c : _ -> True
-                               _ -> False
-    endsWith c = (beginsWith c) . reverse
     isValid x =
-      beginsWith '(' x
-      && endsWith ')' x
+      "(" `isPrefixOf` x
+      && ")" `isSuffixOf` x
       && count (== ',') x == 1 -- Allows (,1) but that doesn't happen so it's OK
-      && (all (\c -> c `elem` "0123456789,()")) x
+      && all (`elem` "0123456789,()") x
