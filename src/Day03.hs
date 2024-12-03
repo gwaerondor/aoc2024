@@ -7,48 +7,46 @@ import Data.List.Split (splitOn)
 data Instruction =
   Mul Int Int
   | Do
-  | Dont
-  deriving Show
+  | Don't
 
 run :: FilePath -> IO Result
 run inputFile =
   solve2 part1 part2 contents
   where
-    contents = readFile inputFile
+    contents = choose id <$> parse <$> readFile inputFile
 
-part1 :: String -> Int
-part1 input = sum $ f <$> parse input
+part1 :: [Instruction] -> Int
+part1 input = sum $ f <$> input
   where f (Mul a b) = a * b
         f _ = 0
 
-part2 :: String -> Int
-part2 input = (f Do) $ parse input
-  where f _ (Dont : more) = f Dont more
+part2 :: [Instruction] -> Int
+part2 = f Do
+  where f _ (Don't : more) = f Don't more
         f _ (Do : more) = f Do more
         f Do ((Mul a b) : rest) = (a * b) + (f Do rest)
-        f Dont (_ : rest) = f Dont rest
+        f Don't (_ : rest) = f Don't rest
         f _ [] = 0
 
-parse = (choose id) . parseTopLevel
-
-parseTopLevel :: String -> [Maybe Instruction]
-parseTopLevel [] = []
-parseTopLevel s
-  | "do()" `isPrefixOf` s = (Just Do) : (parseTopLevel $ drop 4 s)
-  | "don't()" `isPrefixOf` s = (Just Dont) : (parseTopLevel $ tail s)
-  | "mul" `isPrefixOf` s = (tryParseArguments $ drop 3 s) : (parseTopLevel $ tail s)
-  | otherwise = parseTopLevel $ tail s
+parse :: String -> [Maybe Instruction]
+parse [] = []
+parse s
+  | "do()" `isPrefixOf` s = (Just Do) : (parse $ drop 4 s)
+  | "don't()" `isPrefixOf` s = (Just Don't) : (parse $ tail s)
+  | "mul" `isPrefixOf` s = (tryParseArguments $ drop 3 s) : (parse $ tail s)
+  | otherwise = parse $ tail s
 
 tryParseArguments :: String -> Maybe Instruction
 tryParseArguments s =
   let nextToken = takeWhileInclusive (/= ')') s in
-    case isValid nextToken of
-      True ->
-        case splitOn "," $ filter (\c -> not $ c `elem` "()") nextToken of
+    f nextToken
+  where
+    f token
+      | isValid token =
+        case splitOn "," $ filter (\c -> not $ c `elem` "()") token of
           [a, b] -> Just $ Mul (read a) (read b)
           _ -> Nothing
-      False -> Nothing
-  where
+      | otherwise = Nothing
     isValid x =
       "(" `isPrefixOf` x
       && ")" `isSuffixOf` x
