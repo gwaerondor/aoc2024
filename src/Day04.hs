@@ -18,7 +18,7 @@ part1 lines =
         | "XMAS" `isPrefixOf` s = 1 + (f $ tail s)
         | otherwise = 0 + (f $ tail s)
 
-(!!!) matrix (y, x) =
+(!!!) matrix (x, y) =
   (matrix !! y) !! x
 
 part2 :: [[Char]] -> Int
