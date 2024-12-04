@@ -2,6 +2,7 @@ module Day04 (run) where
 import Aoc
 import Data.Universe.Helpers (diagonals)
 import Data.List (transpose, isPrefixOf)
+import Control.Applicative (liftA2)
 
 run :: FilePath -> IO Result
 run inputFile = solve2 part1 part2 contents
@@ -23,9 +24,12 @@ part1 lines =
 
 part2 :: [[Char]] -> Int
 part2 lines =
-  let coords = [ (x, y) | y <- [1..((length $ lines) - 2)], x <- [1..((length $ (head lines)) - 2)] ] in
+  let xs = [1..((length $ (head lines)) - 2)]
+      ys = [1..((length $ lines) - 2)]
+      coords = [ (x, y) | x <- xs, y <- ys ]
+  in
     length $ filter (f lines) coords
     where
       f ls cs = all (`elem` ["MAS", "SAM"]) [(rise cs ls), (fall cs ls)]
-      rise (x, y) lines = [lines !!! (x-1, y+1), lines !!! (x, y), lines !!! (x+1, y-1)]
-      fall (x, y) lines = [lines !!! (x-1, y-1), lines !!! (x, y), lines !!! (x+1, y+1)]
+      rise (x, y) lines = (lines !!!) <$> zip [x-1, x, x+1] [y+1, y, y-1]
+      fall (x, y) lines = (lines !!!) <$> zip [x-1, x, x+1] [y-1, y, y+1]
