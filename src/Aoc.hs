@@ -34,7 +34,7 @@ prettyResult (Result a b) =
 solve :: Show b => (a -> b) -> IO a -> IO String
 solve f contents = fmap (show . f) contents
 
-solve2 :: Show b => (a -> b) -> (a -> b) -> IO a -> IO Result
+solve2 :: Show b => Show c => (a -> b) -> (a -> c) -> IO a -> IO Result
 solve2 f g contents = do
   p1 <- solve f contents
   p2 <- solve g contents

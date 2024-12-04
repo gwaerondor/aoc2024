@@ -86,7 +86,8 @@ executable robin-aoc2024
   -- Other library packages from which modules are imported.
   build-depends:       base,
                        split,
-                       assoc-list
+                       assoc-list,
+                       universe-base
   
   -- Directories containing source files.
   hs-source-dirs:      src
