@@ -2,7 +2,6 @@ module Day04 (run) where
 import Aoc
 import Data.Universe.Helpers (diagonals)
 import Data.List (transpose, isPrefixOf)
-import Control.Applicative (liftA2)
 
 run :: FilePath -> IO Result
 run inputFile = solve2 part1 part2 contents
