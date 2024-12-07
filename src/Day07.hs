@@ -10,7 +10,7 @@ part1 :: [Equation] -> Int
 part1 = sumValid [(+), (*)]
 
 part2 :: [Equation] -> Int
-part2 = sumValid [(+), (*), catInt]
+part2 = sumValid [(+), (*), (⌢)]
 
 sumValid :: [(Int -> Int -> Int)] -> [Equation] -> Int
 sumValid ops es =
@@ -25,8 +25,8 @@ isValid (t:terms) target ops acc
 getTarget :: Equation -> Int
 getTarget (Equation t _) = t
 
-catInt :: Int -> Int -> Int
-catInt a b = read $ (show a) ++ (show b)
+(⌢) :: Int -> Int -> Int
+a ⌢ b = read $ (show a) ++ (show b)
 
 run :: FilePath -> IO Result
 run inputFile = solve2 part1 part2 contents
