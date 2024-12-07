@@ -84,10 +84,11 @@ executable robin-aoc2024
   -- other-extensions:
   
   -- Other library packages from which modules are imported.
-  build-depends:       base,
+  build-depends:       base >=4.19,
                        split,
                        assoc-list,
-                       universe-base
+                       universe-base,
+                       transformers
   
   -- Directories containing source files.
   hs-source-dirs:      src

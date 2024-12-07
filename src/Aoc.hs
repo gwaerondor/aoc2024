@@ -13,10 +13,13 @@ module Aoc (
   takeWhileInclusive,
   count,
   (<.>),
+  (!!!),
+  (!!?),
   Result (..)
 ) where
 
 import Data.List.Split
+import Data.List
 import Control.Monad ((>=>))
 
 data Result =
@@ -77,3 +80,11 @@ choose _ [] = []
 
 count :: (a -> Bool) -> [a] -> Int
 count p = length . (filter p)
+
+(!!!) :: [[a]] -> (Int, Int) -> a
+matrix !!! (x, y) =
+  (matrix !! y) !! x
+
+(!!?) :: [[a]] -> (Int, Int) -> Maybe a
+matrix !!? (x, y) =
+  matrix !? y >>= (!? x)

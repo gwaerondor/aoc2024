@@ -18,9 +18,6 @@ part1 lines =
         | "XMAS" `isPrefixOf` s = 1 + (f $ tail s)
         | otherwise = 0 + (f $ tail s)
 
-(!!!) matrix (x, y) =
-  (matrix !! y) !! x
-
 part2 :: [[Char]] -> Int
 part2 lines =
   let xs = [1..((length $ (head lines)) - 2)]
